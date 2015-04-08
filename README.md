@@ -68,28 +68,31 @@ A sample java project for setting up Apache spark with eclipse IDE (struggled to
     Restart eclipse.
 
 13. Now in project-explorer open the main file from `src/main/java/com.testproject/App.main` and paste this code in there.
-```
-//keep the default pkg same
+    ```
+	//keep the default pkg same
+	
+	import org.apache.spark.api.java.*;
+	import org.apache.spark.api.java.function.Function;
+	
+	public class App {
+	  public static void main(String[] args) {
+	    String logFile = "/home/user/spark/README.md"; // Using the file from spark installation directory itself.
+	    JavaSparkContext sc = new JavaSparkContext("local", "App",
+	      "/home/user/spark", new String[]{"target/myTestProject-1.0-SNAPSHOT.jar"}); // 3rd argument will be the installation directory of spark, 4th argument will be the generated jar from your project.(check in workspace in "target" directory for exact name)
+	    JavaRDD<String> logData = sc.textFile(logFile).cache();
+	
+	    long numAs = logData.filter(new Function<String, Boolean>() {
+	      public Boolean call(String s) { return s.contains("a"); }
+	    }).count();
+	
+	    long numBs = logData.filter(new Function<String, Boolean>() {
+	      public Boolean call(String s) { return s.contains("b"); }
+	    }).count();
+	
+	    System.out.println("Lines with a: " + numAs + ", lines with b: " + numBs);
+	  }
+	}
+    ```
 
-import org.apache.spark.api.java.*;
-import org.apache.spark.api.java.function.Function;
 
-public class App {
-  public static void main(String[] args) {
-    String logFile = "/home/user/spark/README.md"; // Using the file from spark installation directory itself.
-    JavaSparkContext sc = new JavaSparkContext("local", "App",
-      "/home/user/spark", new String[]{"target/myTestProject-1.0-SNAPSHOT.jar"}); // 3rd argument will be the installation directory of spark, 4th argument will be the generated jar from your project.(check in workspace in "target" directory for exact name)
-    JavaRDD<String> logData = sc.textFile(logFile).cache();
-
-    long numAs = logData.filter(new Function<String, Boolean>() {
-      public Boolean call(String s) { return s.contains("a"); }
-    }).count();
-
-    long numBs = logData.filter(new Function<String, Boolean>() {
-      public Boolean call(String s) { return s.contains("b"); }
-    }).count();
-
-    System.out.println("Lines with a: " + numAs + ", lines with b: " + numBs);
-  }
-}
-```
+14. Once this is in place, just right click on your `App.java` file and `"Rus as"->"Java Application"`
