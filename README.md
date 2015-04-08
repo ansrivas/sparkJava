@@ -26,9 +26,14 @@ A sample java project for setting up Apache spark with eclipse IDE (struggled to
   
   `mv spark-1.3.0-bin-hadoop2.4/ spark`
   
-5. Create a sample maven project.
+5. Create a sample maven project in ANY directory you want.
 
    Give a groupId for eg. "org.testproject" and for eg. artifactId: "myTestProject"
+   
+  `mkdir firstSparkProject`
+  
+  `cd firstSparkProject`
+  
   ```
   mvn archetype:generate -DgroupId=com.testproject -DartifactId=myTestProject -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 	```
@@ -41,3 +46,50 @@ A sample java project for setting up Apache spark with eclipse IDE (struggled to
 7. Now open this project in eclipse. "Import as an existing project"
 
 8. Open the project-explorer and navigate to "pom.xml" and open it.
+
+9. In the opened pom.xml tab, open "pom.xml" from all the tabs underneath: "Dependencies, Effective Pom, pom.xml"
+
+10. Add Spark dependencies in this pom.xml- tab. 
+  ```    
+  <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_2.10</artifactId>
+            <version>1.3.0</version>
+  </dependency>
+  ```
+  
+11. Right click on the "pom.xml" in project-explorer and "Run as" -> "maven-install"
+
+12. Now in terminal, navigate inside project directory "myTestProject" and execute this command.
+    This will download all the required dependencies.
+
+    `mvn eclipse:eclipse`
+  
+    Restart eclipse.
+
+13. Now in project-explorer open the main file from `src/main/java/com.testproject/App.main` and paste this code in there.
+```
+//keep the default pkg same
+
+import org.apache.spark.api.java.*;
+import org.apache.spark.api.java.function.Function;
+
+public class App {
+  public static void main(String[] args) {
+    String logFile = "/home/user/spark/README.md"; // Using the file from spark installation directory itself.
+    JavaSparkContext sc = new JavaSparkContext("local", "App",
+      "/home/user/spark", new String[]{"target/myTestProject-1.0-SNAPSHOT.jar"}); // 3rd argument will be the installation directory of spark, 4th argument will be the generated jar from your project.(check in workspace in "target" directory for exact name)
+    JavaRDD<String> logData = sc.textFile(logFile).cache();
+
+    long numAs = logData.filter(new Function<String, Boolean>() {
+      public Boolean call(String s) { return s.contains("a"); }
+    }).count();
+
+    long numBs = logData.filter(new Function<String, Boolean>() {
+      public Boolean call(String s) { return s.contains("b"); }
+    }).count();
+
+    System.out.println("Lines with a: " + numAs + ", lines with b: " + numBs);
+  }
+}
+```
