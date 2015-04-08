@@ -41,7 +41,7 @@ A sample java project for setting up Apache spark with eclipse IDE (struggled to
 
   `cd myTestProject`
   
-  `mvn eclipse:eclpise`
+  `mvn eclipse:eclipse`
 	
 7. Now open this project in eclipse. "Import as an existing project"
 
