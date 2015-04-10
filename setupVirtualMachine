@@ -1,0 +1,26 @@
+if you other machines in your physical network must be able to reach your VM (or if the VM needs Internet access), use bridged networking. Otherwise, stick to host-only networking.
+
+Stop your VM and open its settings in the VirtualBox (OSE) Manager
+Go to the Network tab
+Select the network mode at your choice (bridged networking or host-only) (in the below example, I'm using host-only)
+
+If you want to use bridged networking, you've to select the right network adapter at Name. For wired connections, you'd select something named like eth0. Wireless connections are usually named wlan0 (the numbers may vary)
+
+Save the settings
+Start the Ubuntu VM
+When up, you can gather the IP address by running:
+
+ifconfig | grep addr
+In the below output, 192.168.56.101 is the IP address that can be used in your Win7 host system to access your VM:
+
+eth0  Link encap:Ethernet  HWaddr 08:00:27:70:27:fe  
+      inet addr:192.168.56.101  Bcast:192.168.56.255  Mask:255.255.255.0
+      inet6 addr: fe80::a00:27ff:fe7b:25fe/64 Scope:Link
+      inet addr:127.0.0.1  Mask:255.0.0.0
+      inet6 addr: ::1/128 Scope:Host
+In your windows host system, edit C:\Windows\drivers\etc\hosts as administrator and add a line:
+
+192.168.56.101   guestserver.com
+If you've a Ubuntu host system, edit /etc/hosts using sudo nano /etc/hosts
+
+Profit!
