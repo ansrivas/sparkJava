@@ -7,7 +7,7 @@ package com.mkinput;
  */
 import org.apache.spark.api.java.*;
 import org.apache.spark.api.java.function.Function;
-
+import org.apache.spark.mllib.*;
 public class App {
   public static void main(String[] args) {
     String logFile = "/home/user/spark/spark/README.md"; // Should be some file on your system
