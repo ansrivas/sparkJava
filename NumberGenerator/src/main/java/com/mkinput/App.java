@@ -23,7 +23,7 @@ public class App {
       public Boolean call(String s) { return s.contains("b"); }
     }).count();
 
-    System.out.println("Lines with a: " + numAs + ", lines with b: " + numBs);
+    System.out.println("Lines with a: " + numAs + "and lines with b: " + numBs);
   }
 }
 
